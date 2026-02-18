@@ -49,7 +49,7 @@ export function Footer() {
           {/* Right */}
           <div className="max-w-xs text-right">
             <p className="text-xs leading-relaxed text-muted-foreground italic">
-              Built by someone who broke production with AWS DMS. Never again.
+              Built by someone who broke production with DMS. Never again.
             </p>
           </div>
         </div>
