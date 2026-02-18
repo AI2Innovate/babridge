@@ -5,84 +5,72 @@ export async function POST(request: Request) {
     const { email, database } = await request.json()
 
     if (!email || !email.includes("@") || !email.includes(".")) {
-      return NextResponse.json(
-        { error: "Invalid email address" },
-        { status: 400 }
-      )
+      return NextResponse.json({ ok: false, error: "Invalid email address" }, { status: 400 })
     }
 
     if (!database) {
-      return NextResponse.json(
-        { error: "Please select a database" },
-        { status: 400 }
-      )
+      return NextResponse.json({ ok: false, error: "Please select a database" }, { status: 400 })
     }
 
-    const NOTIFY_EMAIL = "ai2innovate@gmail.com"
+    const apiKey = process.env.RESEND_API_KEY
+    const ownerEmail = process.env.WAITLIST_OWNER_EMAIL || "ai2innovate@gmail.com"
     const timestamp = new Date().toISOString()
 
-    // Log the signup so it's visible in Vercel logs even if email fails
-    console.log(
-      `[WAITLIST SIGNUP] Email: ${email} | Database: ${database} | Time: ${timestamp}`
-    )
+    console.log(`[WAITLIST SIGNUP] Email: ${email} | Database: ${database} | Time: ${timestamp}`)
 
-    // Send notification email via Resend
-    if (process.env.RESEND_API_KEY) {
-      const resendResponse = await fetch("https://api.resend.com/emails", {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${process.env.RESEND_API_KEY}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          from: "DBA Bridge Waitlist <onboarding@resend.dev>",
-          to: [NOTIFY_EMAIL],
-          subject: `New DBA Bridge Waitlist Signup - ${email}`,
-          html: `
-            <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto;">
-              <h2 style="color: #0d9373;">New Waitlist Signup</h2>
-              <table style="width: 100%; border-collapse: collapse;">
-                <tr>
-                  <td style="padding: 8px; border-bottom: 1px solid #eee; font-weight: bold;">Email</td>
-                  <td style="padding: 8px; border-bottom: 1px solid #eee;">${email}</td>
-                </tr>
-                <tr>
-                  <td style="padding: 8px; border-bottom: 1px solid #eee; font-weight: bold;">Migrating from</td>
-                  <td style="padding: 8px; border-bottom: 1px solid #eee;">${database}</td>
-                </tr>
-                <tr>
-                  <td style="padding: 8px; border-bottom: 1px solid #eee; font-weight: bold;">Signed up at</td>
-                  <td style="padding: 8px; border-bottom: 1px solid #eee;">${timestamp}</td>
-                </tr>
-              </table>
-            </div>
-          `,
-        }),
-      })
-
-      const resendData = await resendResponse.json()
-
-      if (!resendResponse.ok) {
-        console.error("[WAITLIST] Resend API error:", JSON.stringify(resendData))
-        // Still return success to user — we have it in logs
-      } else {
-        console.log("[WAITLIST] Email sent successfully. ID:", resendData.id)
-      }
-    } else {
-      console.warn(
-        "[WAITLIST] RESEND_API_KEY not configured. Email not sent, but signup logged above."
-      )
+    if (!apiKey) {
+      console.error("[WAITLIST] RESEND_API_KEY is missing from environment variables")
+      return NextResponse.json({ ok: false, error: "Email service not configured" }, { status: 500 })
     }
 
-    return NextResponse.json({
-      success: true,
-      message: "Successfully joined the waitlist",
+    const res = await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        from: "DBA Bridge Waitlist <onboarding@resend.dev>",
+        to: [ownerEmail],
+        subject: `New DBA Bridge Waitlist Signup - ${email}`,
+        html: `
+          <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; max-width: 600px; margin: 0 auto; padding: 24px;">
+            <h2 style="color: #0d9373; margin-bottom: 20px;">New Waitlist Signup</h2>
+            <table style="width: 100%; border-collapse: collapse;">
+              <tr>
+                <td style="padding: 12px 8px; border-bottom: 1px solid #e5e7eb; font-weight: 600; width: 140px;">Email</td>
+                <td style="padding: 12px 8px; border-bottom: 1px solid #e5e7eb;"><a href="mailto:${email}">${email}</a></td>
+              </tr>
+              <tr>
+                <td style="padding: 12px 8px; border-bottom: 1px solid #e5e7eb; font-weight: 600;">Migrating from</td>
+                <td style="padding: 12px 8px; border-bottom: 1px solid #e5e7eb;">${database}</td>
+              </tr>
+              <tr>
+                <td style="padding: 12px 8px; border-bottom: 1px solid #e5e7eb; font-weight: 600;">Source</td>
+                <td style="padding: 12px 8px; border-bottom: 1px solid #e5e7eb;">Landing Page</td>
+              </tr>
+              <tr>
+                <td style="padding: 12px 8px; border-bottom: 1px solid #e5e7eb; font-weight: 600;">Signed up at</td>
+                <td style="padding: 12px 8px; border-bottom: 1px solid #e5e7eb;">${timestamp}</td>
+              </tr>
+            </table>
+            <p style="margin-top: 20px; font-size: 12px; color: #6b7280;">This is an automated notification from DBA Bridge waitlist.</p>
+          </div>
+        `,
+      }),
     })
+
+    const data = await res.json()
+
+    if (!res.ok) {
+      console.error("[WAITLIST] Resend error:", res.status, JSON.stringify(data))
+      return NextResponse.json({ ok: false, error: "Failed to send notification email" }, { status: 500 })
+    }
+
+    console.log("[WAITLIST] Email sent successfully. ID:", data.id)
+    return NextResponse.json({ ok: true })
   } catch (err) {
     console.error("[WAITLIST] Unexpected error:", err)
-    return NextResponse.json(
-      { error: "Something went wrong. Please try again." },
-      { status: 500 }
-    )
+    return NextResponse.json({ ok: false, error: "Something went wrong" }, { status: 500 })
   }
 }

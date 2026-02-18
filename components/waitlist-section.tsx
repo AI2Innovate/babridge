@@ -42,8 +42,9 @@ export function WaitlistSection() {
         body: JSON.stringify({ email, database }),
       })
 
-      if (!res.ok) {
-        const data = await res.json()
+      const data = await res.json()
+
+      if (!res.ok || !data.ok) {
         setError(data.error || "Something went wrong. Please try again.")
         return
       }
