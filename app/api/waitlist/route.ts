@@ -13,11 +13,22 @@ export async function POST(request: Request) {
     const timestamp = new Date().toISOString()
 
     // Permanent log — always written regardless of email delivery
+    const signupRecord = {
+      event: "WAITLIST_SIGNUP",
+      email,
+      source: "Landing Page",
+      timestamp,
+      userAgent: request.headers.get("user-agent") || "unknown",
+      ip: request.headers.get("x-forwarded-for") || "unknown",
+    }
     console.log("==============================================")
     console.log("[WAITLIST SIGNUP]")
-    console.log(`  Email:     ${email}`)
-    console.log(`  Source:    Landing Page`)
-    console.log(`  Timestamp: ${timestamp}`)
+    console.log(`  Email:      ${email}`)
+    console.log(`  Source:     Landing Page`)
+    console.log(`  Timestamp:  ${timestamp}`)
+    console.log(`  User-Agent: ${signupRecord.userAgent}`)
+    console.log(`  IP:         ${signupRecord.ip}`)
+    console.log(`  JSON:       ${JSON.stringify(signupRecord)}`)
     console.log("==============================================")
 
     if (!apiKey) {
@@ -38,7 +49,7 @@ export async function POST(request: Request) {
             subject: `New DBA Bridge Waitlist Signup - ${email}`,
           },
         ],
-        from: { email: ownerEmail, name: "DBA Bridge Waitlist" },
+        from: { email: "info@ai2innovate.io", name: "DBA Bridge Waitlist" },
         content: [
           {
             type: "text/html",
