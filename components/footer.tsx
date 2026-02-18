@@ -49,7 +49,7 @@ export function Footer() {
               className="flex items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground"
             >
               <Twitter className="size-4" />
-              X / Twitter
+              X
             </a>
             <a
               href="mailto:info@ai2innovate.io"
@@ -57,6 +57,18 @@ export function Footer() {
             >
               <Mail className="size-4" />
               info@ai2innovate.io
+            </a>
+            <a
+              href="/privacy-policy"
+              className="text-sm text-muted-foreground transition-colors hover:text-foreground"
+            >
+              Privacy Policy
+            </a>
+            <a
+              href="/cookie-policy"
+              className="text-sm text-muted-foreground transition-colors hover:text-foreground"
+            >
+              Cookie Policy
             </a>
             <span className="text-sm text-muted-foreground/50 cursor-default">
               Documentation (coming soon)
