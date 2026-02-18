@@ -18,20 +18,17 @@ export async function POST(request: Request) {
       )
     }
 
-    // Send notification email to info@ai2innovate.io
-    const mailtoSubject = encodeURIComponent("DBA Bridge Waitlist Signup")
-    const mailtoBody = encodeURIComponent(
-      `New waitlist signup:\n\nEmail: ${email}\nDatabase: ${database}\nTimestamp: ${new Date().toISOString()}`
+    const NOTIFY_EMAIL = "ai2innovate@gmail.com"
+    const timestamp = new Date().toISOString()
+
+    // Log the signup so it's visible in Vercel logs even if email fails
+    console.log(
+      `[WAITLIST SIGNUP] Email: ${email} | Database: ${database} | Time: ${timestamp}`
     )
 
-    // Use a fetch to send via a simple email relay
-    // For now, we store the submission and send via Resend/SendGrid if configured,
-    // otherwise we'll use a simple fetch to a webhook or log it
-    const NOTIFY_EMAIL = "ai2innovate@gmail.com"
-
-    // If RESEND_API_KEY is available, send via Resend
+    // Send notification email via Resend
     if (process.env.RESEND_API_KEY) {
-      await fetch("https://api.resend.com/emails", {
+      const resendResponse = await fetch("https://api.resend.com/emails", {
         method: "POST",
         headers: {
           Authorization: `Bearer ${process.env.RESEND_API_KEY}`,
@@ -39,24 +36,50 @@ export async function POST(request: Request) {
         },
         body: JSON.stringify({
           from: "DBA Bridge Waitlist <onboarding@resend.dev>",
-          to: NOTIFY_EMAIL,
-          subject: "New DBA Bridge Waitlist Signup",
+          to: [NOTIFY_EMAIL],
+          subject: `New DBA Bridge Waitlist Signup - ${email}`,
           html: `
-            <h2>New Waitlist Signup</h2>
-            <p><strong>Email:</strong> ${email}</p>
-            <p><strong>Migrating from:</strong> ${database}</p>
-            <p><strong>Signed up:</strong> ${new Date().toISOString()}</p>
+            <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto;">
+              <h2 style="color: #0d9373;">New Waitlist Signup</h2>
+              <table style="width: 100%; border-collapse: collapse;">
+                <tr>
+                  <td style="padding: 8px; border-bottom: 1px solid #eee; font-weight: bold;">Email</td>
+                  <td style="padding: 8px; border-bottom: 1px solid #eee;">${email}</td>
+                </tr>
+                <tr>
+                  <td style="padding: 8px; border-bottom: 1px solid #eee; font-weight: bold;">Migrating from</td>
+                  <td style="padding: 8px; border-bottom: 1px solid #eee;">${database}</td>
+                </tr>
+                <tr>
+                  <td style="padding: 8px; border-bottom: 1px solid #eee; font-weight: bold;">Signed up at</td>
+                  <td style="padding: 8px; border-bottom: 1px solid #eee;">${timestamp}</td>
+                </tr>
+              </table>
+            </div>
           `,
         }),
       })
+
+      const resendData = await resendResponse.json()
+
+      if (!resendResponse.ok) {
+        console.error("[WAITLIST] Resend API error:", JSON.stringify(resendData))
+        // Still return success to user — we have it in logs
+      } else {
+        console.log("[WAITLIST] Email sent successfully. ID:", resendData.id)
+      }
+    } else {
+      console.warn(
+        "[WAITLIST] RESEND_API_KEY not configured. Email not sent, but signup logged above."
+      )
     }
 
-    // Always return success — the signup is recorded
     return NextResponse.json({
       success: true,
       message: "Successfully joined the waitlist",
     })
-  } catch {
+  } catch (err) {
+    console.error("[WAITLIST] Unexpected error:", err)
     return NextResponse.json(
       { error: "Something went wrong. Please try again." },
       { status: 500 }
