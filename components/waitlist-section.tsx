@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Users, CheckCircle } from "lucide-react"
@@ -10,6 +10,11 @@ export function WaitlistSection() {
   const [submitted, setSubmitted] = useState(false)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState("")
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -79,41 +84,52 @@ export function WaitlistSection() {
                   notify you — no spam.
                 </p>
 
-                <form onSubmit={handleSubmit} className="flex flex-col gap-4" autoComplete="off">
-                  <div suppressHydrationWarning>
-                    <label
-                      htmlFor="email"
-                      className="mb-1.5 block text-xs font-medium text-foreground font-mono"
+                {mounted ? (
+                  <form onSubmit={handleSubmit} className="flex flex-col gap-4" autoComplete="off">
+                    <div>
+                      <label
+                        htmlFor="email"
+                        className="mb-1.5 block text-xs font-medium text-foreground font-mono"
+                      >
+                        Email address
+                      </label>
+                      <Input
+                        id="email"
+                        type="email"
+                        placeholder="you@company.com"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        autoComplete="off"
+                        data-lpignore="true"
+                        data-1p-ignore
+                        className="h-10 border-border bg-background text-foreground placeholder:text-muted-foreground"
+                      />
+                    </div>
+
+                    {error && (
+                      <p className="text-xs text-destructive-foreground">
+                        {error}
+                      </p>
+                    )}
+
+                    <Button
+                      type="submit"
+                      size="lg"
+                      disabled={loading}
+                      className="w-full bg-primary text-primary-foreground hover:bg-primary/90 disabled:opacity-50"
                     >
-                      Email address
-                    </label>
-                    <Input
-                      id="email"
-                      type="email"
-                      placeholder="you@company.com"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      autoComplete="off"
-                      data-lpignore="true"
-                      className="h-10 border-border bg-background text-foreground placeholder:text-muted-foreground"
-                    />
+                      {loading ? "Submitting..." : "Join Waitlist"}
+                    </Button>
+                  </form>
+                ) : (
+                  <div className="flex flex-col gap-4">
+                    <div>
+                      <div className="mb-1.5 h-4 w-24 rounded bg-muted animate-pulse" />
+                      <div className="h-10 w-full rounded-md border border-border bg-background" />
+                    </div>
+                    <div className="h-10 w-full rounded-md bg-primary/50" />
                   </div>
-
-                  {error && (
-                    <p className="text-xs text-destructive-foreground">
-                      {error}
-                    </p>
-                  )}
-
-                  <Button
-                    type="submit"
-                    size="lg"
-                    disabled={loading}
-                    className="w-full bg-primary text-primary-foreground hover:bg-primary/90 disabled:opacity-50"
-                  >
-                    {loading ? "Submitting..." : "Join Waitlist"}
-                  </Button>
-                </form>
+                )}
 
                 <div className="mt-6 flex items-center justify-center gap-2 text-sm text-muted-foreground">
                   <Users className="size-4" />
