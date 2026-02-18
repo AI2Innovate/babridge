@@ -16,7 +16,14 @@ export async function POST(request: Request) {
     const ownerEmail = process.env.WAITLIST_OWNER_EMAIL || "ai2innovate@gmail.com"
     const timestamp = new Date().toISOString()
 
-    console.log(`[WAITLIST SIGNUP] Email: ${email} | Database: ${database} | Time: ${timestamp}`)
+    // Permanent log — always written regardless of email delivery
+    console.log("==============================================")
+    console.log("[WAITLIST SIGNUP]")
+    console.log(`  Email:     ${email}`)
+    console.log(`  Database:  ${database}`)
+    console.log(`  Source:    Landing Page`)
+    console.log(`  Timestamp: ${timestamp}`)
+    console.log("==============================================")
 
     if (!apiKey) {
       console.error("[WAITLIST] RESEND_API_KEY is missing from environment variables")
