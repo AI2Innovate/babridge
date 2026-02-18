@@ -10,6 +10,7 @@ export async function POST(request: Request) {
 
     const apiKey = process.env.SENDGRID_API_KEY
     const ownerEmail = process.env.WAITLIST_OWNER_EMAIL || "darshankumar38@gmail.com"
+    const fromEmail = process.env.SENDGRID_FROM_EMAIL || "info@ai2innovate.io"
     const timestamp = new Date().toISOString()
 
     // Permanent log — always written regardless of email delivery
@@ -49,7 +50,7 @@ export async function POST(request: Request) {
             subject: `New DBA Bridge Waitlist Signup - ${email}`,
           },
         ],
-        from: { email: "info@ai2innovate.io", name: "DBA Bridge Waitlist" },
+        from: { email: fromEmail, name: "DBA Bridge Waitlist" },
         content: [
           {
             type: "text/html",
