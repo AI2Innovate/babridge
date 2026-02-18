@@ -4,7 +4,6 @@ import { ProblemSection } from "@/components/problem-section"
 import { SolutionSection } from "@/components/solution-section"
 import { HowItWorks } from "@/components/how-it-works"
 import { DatabasesSection } from "@/components/databases-section"
-import { OpenSourceSection } from "@/components/open-source-section"
 import { WaitlistSection } from "@/components/waitlist-section"
 import { Footer } from "@/components/footer"
 
@@ -29,10 +28,6 @@ export default function Home() {
         <hr className="border-border" />
       </div>
       <DatabasesSection />
-      <div className="mx-auto max-w-6xl px-6">
-        <hr className="border-border" />
-      </div>
-      <OpenSourceSection />
       <div className="mx-auto max-w-6xl px-6">
         <hr className="border-border" />
       </div>

@@ -6,14 +6,15 @@ import { Github } from "lucide-react"
 
 export function Hero() {
   return (
-    <section className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden px-6 pt-24 pb-16">
+    <section className="relative flex min-h-[90vh] flex-col items-center justify-center overflow-hidden px-6 pt-24 pb-16">
       {/* Dot grid background */}
       <div
         className="pointer-events-none absolute inset-0"
         style={{
           backgroundImage:
-            "radial-gradient(circle, rgba(0,212,170,0.08) 1px, transparent 1px)",
+            "radial-gradient(circle, var(--primary) 1px, transparent 1px)",
           backgroundSize: "32px 32px",
+          opacity: 0.06,
         }}
       />
       {/* Glow effect */}
@@ -39,38 +40,6 @@ export function Hero() {
           incompatibility, every risky stored procedure, every data type
           mismatch — before you touch production.
         </p>
-
-        {/* Terminal-style quote block */}
-        <div className="mb-10 w-full max-w-2xl overflow-hidden rounded-lg border border-border bg-card">
-          <div className="flex items-center gap-2 border-b border-border px-4 py-2.5">
-            <span className="size-3 rounded-full bg-[#ff5f57]" />
-            <span className="size-3 rounded-full bg-[#febc2e]" />
-            <span className="size-3 rounded-full bg-[#28c840]" />
-            <span className="ml-2 text-xs text-muted-foreground font-mono">
-              origin-story.md
-            </span>
-          </div>
-          <div className="px-5 py-5 text-left">
-            <p className="text-sm leading-relaxed text-muted-foreground font-mono">
-              <span className="text-primary">{">"}</span> I spent weeks migrating
-              from Oracle to Postgres using AWS DMS. The migration
-              &apos;succeeded.&apos; Then I connected my app and nothing worked.
-              Stored procedures silently failed. Data types were wrong. Foreign
-              keys broke. There was no report, no explanation. Just a log file and
-              a broken app.
-            </p>
-            <p className="mt-3 text-sm leading-relaxed text-muted-foreground font-mono">
-              <span className="text-primary">{">"}</span> I built DBA Bridge so
-              nobody else has to go through that.
-            </p>
-            <p className="mt-4 text-xs text-foreground font-mono">
-              — Darshan,{" "}
-              <span className="text-muted-foreground">
-                Creator of DBA Bridge
-              </span>
-            </p>
-          </div>
-        </div>
 
         <div className="flex flex-col gap-3 sm:flex-row">
           <Button
