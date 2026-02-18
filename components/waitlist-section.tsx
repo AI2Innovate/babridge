@@ -3,18 +3,10 @@
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
 import { Users, CheckCircle } from "lucide-react"
 
 export function WaitlistSection() {
   const [email, setEmail] = useState("")
-  const [database, setDatabase] = useState("")
   const [submitted, setSubmitted] = useState(false)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState("")
@@ -28,18 +20,13 @@ export function WaitlistSection() {
       return
     }
 
-    if (!database) {
-      setError("Please select a database.")
-      return
-    }
-
     setLoading(true)
 
     try {
       const res = await fetch("/api/waitlist", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, database }),
+        body: JSON.stringify({ email }),
       })
 
       const data = await res.json()
@@ -110,28 +97,6 @@ export function WaitlistSection() {
                       data-lpignore="true"
                       className="h-10 border-border bg-background text-foreground placeholder:text-muted-foreground"
                     />
-                  </div>
-
-                  <div>
-                    <label
-                      htmlFor="database"
-                      className="mb-1.5 block text-xs font-medium text-foreground font-mono"
-                    >
-                      What database are you migrating from?
-                    </label>
-                    <Select value={database} onValueChange={setDatabase}>
-                      <SelectTrigger className="w-full h-10 border-border bg-background text-foreground">
-                        <SelectValue placeholder="Select a database" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="oracle">Oracle</SelectItem>
-                        <SelectItem value="sqlserver">SQL Server</SelectItem>
-                        <SelectItem value="mysql">MySQL</SelectItem>
-                        <SelectItem value="mongodb">MongoDB</SelectItem>
-                        <SelectItem value="dynamodb">DynamoDB</SelectItem>
-                        <SelectItem value="other">Other</SelectItem>
-                      </SelectContent>
-                    </Select>
                   </div>
 
                   {error && (

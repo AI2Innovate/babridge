@@ -11,9 +11,9 @@ export function Footer() {
             <Image
               src="/images/dbabridge-logo.png"
               alt="DBA Bridge"
-              width={40}
-              height={40}
-              className="rounded-md"
+              width={44}
+              height={44}
+              className="rounded-lg border border-border/50 dark:border-transparent"
             />
             <div>
               <p className="text-sm font-bold text-foreground">DBA Bridge</p>

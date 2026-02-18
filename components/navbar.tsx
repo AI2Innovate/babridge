@@ -28,13 +28,14 @@ export function Navbar() {
       }`}
     >
       <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
-        <a href="#" className="flex items-center gap-2">
+        <a href="#" className="flex items-center gap-2.5">
           <Image
             src="/images/dbabridge-logo.png"
             alt="DBA Bridge"
-            width={36}
-            height={36}
-            className="rounded-md"
+            width={40}
+            height={40}
+            className="rounded-lg border border-border/50 dark:border-transparent"
+            priority
           />
           <span className="text-lg font-bold tracking-tight text-foreground">
             DBA Bridge

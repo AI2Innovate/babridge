@@ -2,14 +2,10 @@ import { NextResponse } from "next/server"
 
 export async function POST(request: Request) {
   try {
-    const { email, database } = await request.json()
+    const { email } = await request.json()
 
     if (!email || !email.includes("@") || !email.includes(".")) {
       return NextResponse.json({ ok: false, error: "Invalid email address" }, { status: 400 })
-    }
-
-    if (!database) {
-      return NextResponse.json({ ok: false, error: "Please select a database" }, { status: 400 })
     }
 
     const apiKey = process.env.RESEND_API_KEY
@@ -20,7 +16,6 @@ export async function POST(request: Request) {
     console.log("==============================================")
     console.log("[WAITLIST SIGNUP]")
     console.log(`  Email:     ${email}`)
-    console.log(`  Database:  ${database}`)
     console.log(`  Source:    Landing Page`)
     console.log(`  Timestamp: ${timestamp}`)
     console.log("==============================================")
@@ -47,10 +42,6 @@ export async function POST(request: Request) {
               <tr>
                 <td style="padding: 12px 8px; border-bottom: 1px solid #e5e7eb; font-weight: 600; width: 140px;">Email</td>
                 <td style="padding: 12px 8px; border-bottom: 1px solid #e5e7eb;"><a href="mailto:${email}">${email}</a></td>
-              </tr>
-              <tr>
-                <td style="padding: 12px 8px; border-bottom: 1px solid #e5e7eb; font-weight: 600;">Migrating from</td>
-                <td style="padding: 12px 8px; border-bottom: 1px solid #e5e7eb;">${database}</td>
               </tr>
               <tr>
                 <td style="padding: 12px 8px; border-bottom: 1px solid #e5e7eb; font-weight: 600;">Source</td>
