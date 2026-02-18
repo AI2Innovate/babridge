@@ -24,7 +24,7 @@ export function Footer() {
           {/* Center links */}
           <div className="flex flex-wrap items-center gap-6">
             <a
-              href="https://github.com"
+              href="https://github.com/AI2Innovate/dbabridge"
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground"

@@ -34,7 +34,7 @@ export function Navbar() {
         {/* Desktop nav */}
         <div className="hidden items-center gap-3 md:flex">
           <a
-            href="https://github.com"
+            href="https://github.com/AI2Innovate/dbabridge"
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground"
@@ -101,7 +101,7 @@ export function Navbar() {
       {mobileOpen && (
         <div className="flex flex-col gap-4 border-t border-border bg-background/95 px-6 py-4 backdrop-blur-md md:hidden">
           <a
-            href="https://github.com"
+            href="https://github.com/AI2Innovate/dbabridge"
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground"

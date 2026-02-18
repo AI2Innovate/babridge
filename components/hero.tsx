@@ -60,7 +60,7 @@ export function Hero() {
             asChild
           >
             <a
-              href="https://github.com"
+              href="https://github.com/AI2Innovate/dbabridge"
               target="_blank"
               rel="noopener noreferrer"
             >

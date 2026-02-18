@@ -16,9 +16,10 @@ export function WaitlistSection() {
   const [email, setEmail] = useState("")
   const [database, setDatabase] = useState("")
   const [submitted, setSubmitted] = useState(false)
+  const [loading, setLoading] = useState(false)
   const [error, setError] = useState("")
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError("")
 
@@ -32,7 +33,27 @@ export function WaitlistSection() {
       return
     }
 
-    setSubmitted(true)
+    setLoading(true)
+
+    try {
+      const res = await fetch("/api/waitlist", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, database }),
+      })
+
+      if (!res.ok) {
+        const data = await res.json()
+        setError(data.error || "Something went wrong. Please try again.")
+        return
+      }
+
+      setSubmitted(true)
+    } catch {
+      setError("Something went wrong. Please try again.")
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -121,9 +142,10 @@ export function WaitlistSection() {
                   <Button
                     type="submit"
                     size="lg"
-                    className="w-full bg-primary text-primary-foreground hover:bg-primary/90"
+                    disabled={loading}
+                    className="w-full bg-primary text-primary-foreground hover:bg-primary/90 disabled:opacity-50"
                   >
-                    Join Waitlist
+                    {loading ? "Submitting..." : "Join Waitlist"}
                   </Button>
                 </form>
 
