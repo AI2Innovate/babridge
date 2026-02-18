@@ -1,4 +1,4 @@
-import { Github, Mail } from "lucide-react"
+import { Github, Mail, Twitter } from "lucide-react"
 import Image from "next/image"
 
 export function Footer() {
@@ -41,6 +41,15 @@ export function Footer() {
             >
               <Github className="size-4" />
               GitHub
+            </a>
+            <a
+              href="https://x.com/dbabridgehq"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground"
+            >
+              <Twitter className="size-4" />
+              X / Twitter
             </a>
             <a
               href="mailto:info@ai2innovate.io"
