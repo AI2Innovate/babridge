@@ -13,7 +13,7 @@ export async function POST(request: Request) {
     }
 
     const apiKey = process.env.RESEND_API_KEY
-    const ownerEmail = process.env.WAITLIST_OWNER_EMAIL || "ai2innovate@gmail.com"
+    const ownerEmail = process.env.WAITLIST_OWNER_EMAIL || "darshankumar38@gmail.com"
     const timestamp = new Date().toISOString()
 
     // Permanent log — always written regardless of email delivery
