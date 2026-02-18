@@ -1,4 +1,4 @@
-import { Github, Twitter } from "lucide-react"
+import { Github } from "lucide-react"
 
 export function Footer() {
   return (
@@ -31,15 +31,6 @@ export function Footer() {
             >
               <Github className="size-4" />
               GitHub
-            </a>
-            <a
-              href="https://x.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground"
-            >
-              <Twitter className="size-4" />
-              Twitter / X
             </a>
             <span className="text-sm text-muted-foreground/50 cursor-default">
               Documentation (coming soon)
