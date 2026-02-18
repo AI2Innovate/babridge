@@ -27,7 +27,7 @@ export async function POST(request: Request) {
     // Use a fetch to send via a simple email relay
     // For now, we store the submission and send via Resend/SendGrid if configured,
     // otherwise we'll use a simple fetch to a webhook or log it
-    const NOTIFY_EMAIL = "info@ai2innovate.io"
+    const NOTIFY_EMAIL = "ai2innovate@gmail.com"
 
     // If RESEND_API_KEY is available, send via Resend
     if (process.env.RESEND_API_KEY) {
