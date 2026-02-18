@@ -14,17 +14,16 @@ export const metadata: Metadata = {
     'Open source database migration tool that scans your legacy database and tells you every incompatibility, every risky stored procedure, every data type mismatch — before you touch production.',
   icons: {
     icon: [
+      { url: '/favicon.png', type: 'image/png' },
       {
         url: '/icon-light-32x32.png',
+        sizes: '32x32',
         media: '(prefers-color-scheme: light)',
       },
       {
         url: '/icon-dark-32x32.png',
+        sizes: '32x32',
         media: '(prefers-color-scheme: dark)',
-      },
-      {
-        url: '/icon.svg',
-        type: 'image/svg+xml',
       },
     ],
     apple: '/apple-icon.png',
