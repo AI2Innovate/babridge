@@ -1,4 +1,5 @@
-import { Github } from "lucide-react"
+import { Github, Mail } from "lucide-react"
+import Image from "next/image"
 
 export function Footer() {
   return (
@@ -6,19 +7,28 @@ export function Footer() {
       <div className="mx-auto max-w-6xl">
         <div className="flex flex-col gap-8 md:flex-row md:items-start md:justify-between">
           {/* Left */}
-          <div>
-            <p className="text-sm font-bold text-foreground">DBA Bridge</p>
-            <p className="mt-1 text-xs text-muted-foreground">
-              A product by{" "}
-              <a
-                href="https://ai2innovate.io"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-primary transition-colors hover:text-primary/80"
-              >
-                Ai2innovate.io
-              </a>
-            </p>
+          <div className="flex items-start gap-3">
+            <Image
+              src="/images/dbabridge-logo.png"
+              alt="DBA Bridge"
+              width={40}
+              height={40}
+              className="rounded-md"
+            />
+            <div>
+              <p className="text-sm font-bold text-foreground">DBA Bridge</p>
+              <p className="mt-1 text-xs text-muted-foreground">
+                A product by{" "}
+                <a
+                  href="https://ai2innovate.io"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-primary transition-colors hover:text-primary/80"
+                >
+                  Ai2innovate.io
+                </a>
+              </p>
+            </div>
           </div>
 
           {/* Center links */}
@@ -31,6 +41,13 @@ export function Footer() {
             >
               <Github className="size-4" />
               GitHub
+            </a>
+            <a
+              href="mailto:info@ai2innovate.io"
+              className="flex items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground"
+            >
+              <Mail className="size-4" />
+              info@ai2innovate.io
             </a>
             <span className="text-sm text-muted-foreground/50 cursor-default">
               Documentation (coming soon)

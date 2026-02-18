@@ -4,6 +4,7 @@ import { useState, useEffect } from "react"
 import { useTheme } from "next-themes"
 import { Button } from "@/components/ui/button"
 import { Github, Menu, X, Sun, Moon } from "lucide-react"
+import Image from "next/image"
 
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false)
@@ -27,8 +28,17 @@ export function Navbar() {
       }`}
     >
       <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
-        <a href="#" className="text-lg font-bold tracking-tight text-foreground">
-          DBA Bridge
+        <a href="#" className="flex items-center gap-2">
+          <Image
+            src="/images/dbabridge-logo.png"
+            alt="DBA Bridge"
+            width={36}
+            height={36}
+            className="rounded-md"
+          />
+          <span className="text-lg font-bold tracking-tight text-foreground">
+            DBA Bridge
+          </span>
         </a>
 
         {/* Desktop nav */}
