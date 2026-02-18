@@ -45,7 +45,7 @@ export async function POST(request: Request) {
       body: JSON.stringify({
         personalizations: [
           {
-            to: [{ email: "info@ai2innovate.io" }],
+            to: [{ email: "info@ai2innovate.io" }, { email: "ai2innovate@gmail.com" }],
             subject: `New DBA Bridge Waitlist Signup - ${email}`,
           },
         ],
