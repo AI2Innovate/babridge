@@ -8,7 +8,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ ok: false, error: "Invalid email address" }, { status: 400 })
     }
 
-    const apiKey = process.env.RESEND_API_KEY
+    const apiKey = process.env.SENDGRID_API_KEY
     const ownerEmail = process.env.WAITLIST_OWNER_EMAIL || "darshankumar38@gmail.com"
     const timestamp = new Date().toISOString()
 
@@ -21,52 +21,61 @@ export async function POST(request: Request) {
     console.log("==============================================")
 
     if (!apiKey) {
-      console.error("[WAITLIST] RESEND_API_KEY is missing from environment variables")
+      console.error("[WAITLIST] SENDGRID_API_KEY is missing from environment variables")
       return NextResponse.json({ ok: false, error: "Email service not configured" }, { status: 500 })
     }
 
-    const res = await fetch("https://api.resend.com/emails", {
+    const res = await fetch("https://api.sendgrid.com/v3/mail/send", {
       method: "POST",
       headers: {
         Authorization: `Bearer ${apiKey}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        from: "DBA Bridge Waitlist <onboarding@resend.dev>",
-        to: [ownerEmail],
-        subject: `New DBA Bridge Waitlist Signup - ${email}`,
-        html: `
-          <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; max-width: 600px; margin: 0 auto; padding: 24px;">
-            <h2 style="color: #0d9373; margin-bottom: 20px;">New Waitlist Signup</h2>
-            <table style="width: 100%; border-collapse: collapse;">
-              <tr>
-                <td style="padding: 12px 8px; border-bottom: 1px solid #e5e7eb; font-weight: 600; width: 140px;">Email</td>
-                <td style="padding: 12px 8px; border-bottom: 1px solid #e5e7eb;"><a href="mailto:${email}">${email}</a></td>
-              </tr>
-              <tr>
-                <td style="padding: 12px 8px; border-bottom: 1px solid #e5e7eb; font-weight: 600;">Source</td>
-                <td style="padding: 12px 8px; border-bottom: 1px solid #e5e7eb;">Landing Page</td>
-              </tr>
-              <tr>
-                <td style="padding: 12px 8px; border-bottom: 1px solid #e5e7eb; font-weight: 600;">Signed up at</td>
-                <td style="padding: 12px 8px; border-bottom: 1px solid #e5e7eb;">${timestamp}</td>
-              </tr>
-            </table>
-            <p style="margin-top: 20px; font-size: 12px; color: #6b7280;">This is an automated notification from DBA Bridge waitlist.</p>
-          </div>
-        `,
+        personalizations: [
+          {
+            to: [{ email: ownerEmail }],
+            subject: `New DBA Bridge Waitlist Signup - ${email}`,
+          },
+        ],
+        from: { email: ownerEmail, name: "DBA Bridge Waitlist" },
+        content: [
+          {
+            type: "text/html",
+            value: `
+              <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; max-width: 600px; margin: 0 auto; padding: 24px;">
+                <h2 style="color: #0d9373; margin-bottom: 20px;">New Waitlist Signup</h2>
+                <table style="width: 100%; border-collapse: collapse;">
+                  <tr>
+                    <td style="padding: 12px 8px; border-bottom: 1px solid #e5e7eb; font-weight: 600; width: 140px;">Email</td>
+                    <td style="padding: 12px 8px; border-bottom: 1px solid #e5e7eb;"><a href="mailto:${email}">${email}</a></td>
+                  </tr>
+                  <tr>
+                    <td style="padding: 12px 8px; border-bottom: 1px solid #e5e7eb; font-weight: 600;">Source</td>
+                    <td style="padding: 12px 8px; border-bottom: 1px solid #e5e7eb;">Landing Page</td>
+                  </tr>
+                  <tr>
+                    <td style="padding: 12px 8px; border-bottom: 1px solid #e5e7eb; font-weight: 600;">Signed up at</td>
+                    <td style="padding: 12px 8px; border-bottom: 1px solid #e5e7eb;">${timestamp}</td>
+                  </tr>
+                </table>
+                <p style="margin-top: 20px; font-size: 12px; color: #6b7280;">This is an automated notification from DBA Bridge waitlist.</p>
+              </div>
+            `,
+          },
+        ],
       }),
     })
 
-    const data = await res.json()
-
-    if (!res.ok) {
-      console.error("[WAITLIST] Resend error:", res.status, JSON.stringify(data))
-      return NextResponse.json({ ok: false, error: "Failed to send notification email" }, { status: 500 })
+    // SendGrid returns 202 on success with no body
+    if (res.status === 202) {
+      console.log("[WAITLIST] Email sent successfully via SendGrid")
+      return NextResponse.json({ ok: true })
     }
 
-    console.log("[WAITLIST] Email sent successfully. ID:", data.id)
-    return NextResponse.json({ ok: true })
+    const errorText = await res.text()
+    console.error("[WAITLIST] SendGrid error:", res.status, errorText)
+    return NextResponse.json({ ok: false, error: "Failed to send notification email" }, { status: 500 })
   } catch (err) {
     console.error("[WAITLIST] Unexpected error:", err)
     return NextResponse.json({ ok: false, error: "Something went wrong" }, { status: 500 })
