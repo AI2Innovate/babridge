@@ -70,8 +70,8 @@ export function WaitlistSection() {
                   notify you — no spam.
                 </p>
 
-                <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-                  <div>
+                <form onSubmit={handleSubmit} className="flex flex-col gap-4" autoComplete="off">
+                  <div suppressHydrationWarning>
                     <label
                       htmlFor="email"
                       className="mb-1.5 block text-xs font-medium text-foreground font-mono"
@@ -84,6 +84,8 @@ export function WaitlistSection() {
                       placeholder="you@company.com"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
+                      autoComplete="off"
+                      data-lpignore="true"
                       className="h-10 border-border bg-background text-foreground placeholder:text-muted-foreground"
                     />
                   </div>

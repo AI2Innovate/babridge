@@ -9,7 +9,15 @@ export function Footer() {
           <div>
             <p className="text-sm font-bold text-foreground">DBA Bridge</p>
             <p className="mt-1 text-xs text-muted-foreground">
-              A product by MultiMind Lab
+              A product by{" "}
+              <a
+                href="https://ai2innovate.io"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-primary transition-colors hover:text-primary/80"
+              >
+                Ai2innovate.io
+              </a>
             </p>
           </div>
 
