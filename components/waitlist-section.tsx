@@ -1,53 +1,8 @@
-"use client"
-
-import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Users, CheckCircle } from "lucide-react"
+import { Users } from "lucide-react"
 
 export function WaitlistSection() {
-  const [email, setEmail] = useState("")
-  const [submitted, setSubmitted] = useState(false)
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState("")
-  const [mounted, setMounted] = useState(false)
-
-  useEffect(() => {
-    setMounted(true)
-  }, [])
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setError("")
-
-    if (!email || !email.includes("@") || !email.includes(".")) {
-      setError("Please enter a valid email address.")
-      return
-    }
-
-    setLoading(true)
-
-    try {
-      const res = await fetch("/api/waitlist", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email }),
-      })
-
-      const data = await res.json()
-
-      if (!res.ok || !data.ok) {
-        setError(data.error || "Something went wrong. Please try again.")
-        return
-      }
-
-      setSubmitted(true)
-    } catch {
-      setError("Something went wrong. Please try again.")
-    } finally {
-      setLoading(false)
-    }
-  }
 
   return (
     <section id="waitlist" className="px-6 py-24">
@@ -62,86 +17,58 @@ export function WaitlistSection() {
             </div>
           </div>
           <div className="p-6 md:p-8">
-            {submitted ? (
-              <div className="flex flex-col items-center py-8 text-center">
-                <div className="mb-4 flex size-16 items-center justify-center rounded-full bg-primary/10">
-                  <CheckCircle className="size-8 text-primary" />
+            <>
+              <h2 className="mb-2 text-2xl font-bold tracking-tight text-foreground text-balance">
+                Join the Early Access Waitlist
+              </h2>
+              <p className="mb-6 text-sm text-muted-foreground">
+                Be the first to try DBA Bridge when it launches. {"We'll"}{" "}
+                notify you — no spam.
+              </p>
+
+              <form
+                action="https://formspree.io/f/xjyvlvkj"
+                method="POST"
+                className="flex flex-col gap-4"
+              >
+                <div>
+                  <label
+                    htmlFor="email"
+                    className="mb-1.5 block text-xs font-medium text-foreground font-mono"
+                  >
+                    Email address
+                  </label>
+                  <Input
+                    id="email"
+                    name="email"
+                    type="email"
+                    placeholder="you@company.com"
+                    required
+                    autoComplete="email"
+                    className="h-10 border-border bg-background text-foreground placeholder:text-muted-foreground"
+                  />
                 </div>
-                <h3 className="mb-2 text-xl font-bold text-foreground">
-                  {"You're on the list!"}
-                </h3>
-                <p className="text-sm text-muted-foreground">
-                  {"We'll email you when DBA Bridge is ready. No spam, promise."}
-                </p>
+
+                <Button
+                  type="submit"
+                  size="lg"
+                  className="w-full bg-primary text-primary-foreground hover:bg-primary/90"
+                >
+                  Join Waitlist
+                </Button>
+              </form>
+
+              <div className="mt-6 flex items-center justify-center gap-2 text-sm text-muted-foreground">
+                <Users className="size-4" />
+                <span>
+                  <span className="font-medium text-foreground font-mono">
+                    127
+                  </span>{" "}
+                  engineers already on the waitlist
+                </span>
               </div>
-            ) : (
-              <>
-                <h2 className="mb-2 text-2xl font-bold tracking-tight text-foreground text-balance">
-                  Join the Early Access Waitlist
-                </h2>
-                <p className="mb-6 text-sm text-muted-foreground">
-                  Be the first to try DBA Bridge when it launches. {"We'll"}{" "}
-                  notify you — no spam.
-                </p>
+            </>
 
-                {mounted ? (
-                  <form onSubmit={handleSubmit} className="flex flex-col gap-4" autoComplete="off">
-                    <div>
-                      <label
-                        htmlFor="email"
-                        className="mb-1.5 block text-xs font-medium text-foreground font-mono"
-                      >
-                        Email address
-                      </label>
-                      <Input
-                        id="email"
-                        type="email"
-                        placeholder="you@company.com"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        autoComplete="off"
-                        data-lpignore="true"
-                        data-1p-ignore
-                        className="h-10 border-border bg-background text-foreground placeholder:text-muted-foreground"
-                      />
-                    </div>
-
-                    {error && (
-                      <p className="text-xs text-destructive-foreground">
-                        {error}
-                      </p>
-                    )}
-
-                    <Button
-                      type="submit"
-                      size="lg"
-                      disabled={loading}
-                      className="w-full bg-primary text-primary-foreground hover:bg-primary/90 disabled:opacity-50"
-                    >
-                      {loading ? "Submitting..." : "Join Waitlist"}
-                    </Button>
-                  </form>
-                ) : (
-                  <div className="flex flex-col gap-4">
-                    <div>
-                      <div className="mb-1.5 h-4 w-24 rounded bg-muted animate-pulse" />
-                      <div className="h-10 w-full rounded-md border border-border bg-background" />
-                    </div>
-                    <div className="h-10 w-full rounded-md bg-primary/50" />
-                  </div>
-                )}
-
-                <div className="mt-6 flex items-center justify-center gap-2 text-sm text-muted-foreground">
-                  <Users className="size-4" />
-                  <span>
-                    <span className="font-medium text-foreground font-mono">
-                      127
-                    </span>{" "}
-                    engineers already on the waitlist
-                  </span>
-                </div>
-              </>
-            )}
           </div>
         </div>
       </div>
