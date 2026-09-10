@@ -90,10 +90,6 @@ export default function PrivacyPolicyPage() {
             </p>
             <ul className="mt-3 list-disc space-y-2 pl-6">
               <li>
-                <strong className="text-foreground">SendGrid:</strong> For
-                sending email notifications
-              </li>
-              <li>
                 <strong className="text-foreground">Google Analytics:</strong>{" "}
                 For website usage analytics
               </li>
