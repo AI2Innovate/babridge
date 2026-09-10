@@ -3,7 +3,6 @@ import { Input } from "@/components/ui/input"
 import { Users } from "lucide-react"
 
 export function WaitlistSection() {
-
   return (
     <section id="waitlist" className="px-6 py-24">
       <div className="mx-auto max-w-6xl">
@@ -17,8 +16,7 @@ export function WaitlistSection() {
             </div>
           </div>
           <div className="p-6 md:p-8">
-            <>
-              <h2 className="mb-2 text-2xl font-bold tracking-tight text-foreground text-balance">
+            <h2 className="mb-2 text-2xl font-bold tracking-tight text-foreground text-balance">
                 Join the Early Access Waitlist
               </h2>
               <p className="mb-6 text-sm text-muted-foreground">
@@ -67,8 +65,6 @@ export function WaitlistSection() {
                   engineers already on the waitlist
                 </span>
               </div>
-            </>
-
           </div>
         </div>
       </div>
